@@ -2,7 +2,6 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import useProjects from '../hooks/useProjects';
-import useMembers from '../hooks/useMembers';
 
 const columns = [
   { field: 'projectName', headerName: 'Project List', width: 300 },
@@ -19,7 +18,6 @@ const columns = [
 const ProjectTable = () => {
   const {projects , rows, projectIds} = useProjects();
 
-  //console.log(members);
   console.log(projectIds);
 
   return (
