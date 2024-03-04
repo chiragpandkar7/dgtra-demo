@@ -11,7 +11,7 @@ import axios from 'axios'
 //         }),
 //         {
 //           headers: {
-//             Authorization: `Basic cnF6U3ZwblZzU0cyVWlIRGZOMWVVQXlVazM3b3gwd3Y6dTNNYzhCSG9QWU1GVjlyRw==`,
+//             Authorization: ``,
 //             'Content-Type': 'application/x-www-form-urlencoded',
 //           },
 //         }
