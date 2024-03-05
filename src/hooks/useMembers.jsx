@@ -54,7 +54,7 @@ const useMembers = () => {
       setMembers(flattenedMembers);
       console.log(newMembers)
     } catch (error) {
-      console.error('Error fetching members:', error);
+      console.error('Error fetching members:', error);  
     }
 
   
