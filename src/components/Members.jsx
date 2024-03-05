@@ -3,7 +3,7 @@ import useMembers from '../hooks/useMembers';
 
 const MembersPanel = () => {
     const { members } = useMembers();
-    console.log(members)
+    
     return (
         <div className="left-panel">
             <h2>Members</h2>

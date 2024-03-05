@@ -16,14 +16,19 @@ const columns = [
 ];
 
 const ProjectTable = () => {
-  const {projects , rows, projectIds} = useProjects();
+  const {projects , rows, projectIds, selectedMemberId} = useProjects();
+
+  const filteredProjects = selectedMemberId
+    ? projects.filter((project) => projectIds[selectedMemberId].includes(project.id))
+    : projects;
+
 
   console.log(projectIds);
 
   return (
     <div style={{ height: '80vh', width: '100%', marginTop: '20px' }} className='main-content'>
       <Typography variant="h3">Project Table</Typography>
-      {projects.length > 0 ? (
+      {filteredProjects.length > 0 ? (
         <DataGrid
           checkboxSelection
           rows={rows}
