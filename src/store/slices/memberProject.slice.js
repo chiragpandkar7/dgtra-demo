@@ -4,9 +4,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const membersProjectsSlice = createSlice ({
     name: 'membersProjects',
     initialState: {},
+    projects:null,
     reducers: {
         setMembersProjects(state, action) {
-            state = action.payload;
+            state.projects = action.payload.newMembersProjects;
         },
     },
 });

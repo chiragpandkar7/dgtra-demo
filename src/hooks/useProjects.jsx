@@ -3,8 +3,9 @@ import { getProjects } from '../apis/apsServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProjects } from '../store/slices/project.slice';
 
+
 const useProjects = () => {
-  const { projects, projectIds } = useSelector((state) => state.project);
+  const { projects, projectIds, filteredProjects } = useSelector((state) => state.project);
   const dispatch = useDispatch();
     console.log("inside useProjects")
   const fetchProjects = async () => {
@@ -20,26 +21,14 @@ const useProjects = () => {
     }
   };
 
+
   useEffect(() => {
     fetchProjects();
   }, []);
 
-  const rows = projects.map((project, index) => ({
-    id: index + 1,
-    projectName: project.name,
-    docs: true,
-    designCollaboration: true,
-    modelCoordination: true,
-    takeoff: true,
-    autoSpecs: true,
-    build: true,
-    costManagement: true,
-    insight: true,
-  }));
-
+  
   return {
     projects,
-    rows,
     projectIds,
   };
 };

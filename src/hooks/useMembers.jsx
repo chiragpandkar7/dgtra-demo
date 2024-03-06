@@ -17,6 +17,7 @@ function removeDuplicates(arr) {
 
 const useMembers = () => {
   const projectIds = useSelector((state) => state.project.projectIds);
+  const selectedMemberId = useSelector((state) => state.members.selectedMemberId);
   const [members, setMembers] = useState([]);
   const dispatch = useDispatch();
   const fetchMembers = async () => {
@@ -49,10 +50,12 @@ const useMembers = () => {
       );
 
       const flattenedMembers = removeDuplicates(fetchedMembers.flat());
-      dispatch(setMembersProjects({newMembersProjects}))
-      dispatch(setMembersKeyVal({newMembers}))
+      console.log(newMembersProjects + "new projects");
+      console.log(newMembers + "new Members");
+      dispatch(setMembersProjects({newMembersProjects}));
+      dispatch(setMembersKeyVal({newMembers}));
       setMembers(flattenedMembers);
-      console.log(newMembers)
+      console.log(newMembers);
     } catch (error) {
       console.error('Error fetching members:', error);  
     }
@@ -68,9 +71,10 @@ const useMembers = () => {
 
   return {
     members,
+    selectedMemberId
   };
 
 
 }
 
-export default useMembers
+export default useMembers;
