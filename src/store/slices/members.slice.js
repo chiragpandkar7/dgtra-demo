@@ -11,9 +11,12 @@ const membersSlice = createSlice ({
         },
         setSelectedMemberId(state, action) {
             state.selectedMemberId = action.payload;
+        },
+        setMembersPermissions(state, action) {
+            state.permissions = action.payload.products;
         }
     },
 });
 
-export const { setMembersKeyVal, setSelectedMemberId } = membersSlice.actions;
+export const { setMembersKeyVal, setSelectedMemberId,setMembersPermissions } = membersSlice.actions;
 export default membersSlice.reducer;

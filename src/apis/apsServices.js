@@ -27,9 +27,8 @@ import axios from 'axios'
 //     }
 // };
 
-const accessToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjY0RE9XMnJoOE9tbjNpdk1NU0xlNGQ2VHEwUV9SUzI1NiIsInBpLmF0bSI6ImFzc2MifQ.eyJzY29wZSI6WyJhY2NvdW50OnJlYWQiLCJkYXRhOnJlYWQiXSwiY2xpZW50X2lkIjoicnF6U3ZwblZzU0cyVWlIRGZOMWVVQXlVazM3b3gwd3YiLCJpc3MiOiJodHRwczovL2RldmVsb3Blci5hcGkuYXV0b2Rlc2suY29tIiwiYXVkIjoiaHR0cHM6Ly9hdXRvZGVzay5jb20iLCJqdGkiOiJmaG9zdnZ0S0cyb2hxcG4yOVo2UDZ0Um9ib3N2aXFER2RMaHl3NkFmcmhpVWVlUHJHZkZFMVlkWUF1VW9NdmpzIiwiZXhwIjoxNzA5NzMxMTQ1fQ.lxr1ZC_mOwS5NU9ZmoLnAPXvWFQn1WLmjhYc7p7GC2csNt84zjUBMwAS9VMSLuDnE3neAKz_5PNphaaXIAQHE8yYAflgZZhn7glpExzTJ35et9F0HzouNpS2Tmqdb2uPGD8n3Y1YBwUbsXd2r10mgXx3CSC2lXFD1nUocZLyg3CBMUj7ccgh_y5XQlp-xCIgmL919Xvu6g36JCO-9LgrPHK-3llZk4EF0zDdtp3qWjT23XyYCRWfeAod0Km3OjwFokuH8c4xqYcUwV3fSA2teotTj_niV1zFOU2VC9JJRRqgj1MuEM0V8ubDSX1gwsgxEEnGx9o7wDeIjXgTzzjoYg';
+const accessToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjY0RE9XMnJoOE9tbjNpdk1NU0xlNGQ2VHEwUV9SUzI1NiIsInBpLmF0bSI6ImFzc2MifQ.eyJzY29wZSI6WyJkYXRhOnJlYWQiLCJkYXRhOmNyZWF0ZSIsImRhdGE6d3JpdGUiLCJhY2NvdW50OndyaXRlIiwiYWNjb3VudDpyZWFkIl0sImNsaWVudF9pZCI6InJxelN2cG5Wc1NHMlVpSERmTjFlVUF5VWszN294MHd2IiwiaXNzIjoiaHR0cHM6Ly9kZXZlbG9wZXIuYXBpLmF1dG9kZXNrLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXV0b2Rlc2suY29tIiwianRpIjoiRnBiS0lyVm5EdXlXMlRKVlI5allrNFdraGd3YUpaVkl5SGRvMnM1SVVaRE93ajZOejYxa2o3eE9hd2E5WE9ZNyIsImV4cCI6MTcwOTkwNTk3NSwidXNlcmlkIjoiUkFIMkRBM05LRFE4NExDQiJ9.INbtmph6O4mMsbAxP6hejNib8nF1iql5jGVJ0Qv3H_ORoi8ulE8FAjNdVHD0nUuQy1F2-W4Puk9RFPHfTrlC4q9qO6P0s6J3-q4dxe_JQQ5tseTy0amvhzwBxxV4HOpTdvnVnEH7Tis3LZ8dDXTPcuq_VK1fSHHeANVxu3ro09_0jYBdI4Zfd02nIZQ2pQjIjOHLb67FKQAy2iC3bCWRfcluo8co8X1a-IweBf202_Kb5VMyiP9U5npPoJbYGy4txKkjcKerh4qlID1XqiWHr8XUe6UHF2VR_fsCpMvafBJCJBTN1tvQbfgVB96BsihMB-d3r9PFyy5Fpqwvw6v4NA';
 const accountId = '59b4539d-c418-4d78-b0e6-308bd58fd54d';
-
 
 export const getProjects = async () => {
     const apiUrl = `https://developer.api.autodesk.com/construction/admin/v1/accounts/${accountId}/projects`;
@@ -52,6 +51,17 @@ export const getMembers =  async (projectId) => {
         },
     });
 
+    return response;
+}
+
+export const getPermissions = async (projectId, memberId) => {
+    const apiUrl = `https://developer.api.autodesk.com/construction/admin/v1/projects/${projectId}/users/${memberId}`;
+
+    const response = await axios.get(apiUrl, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
     return response;
 }
 
