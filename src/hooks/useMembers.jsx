@@ -33,11 +33,12 @@ const useMembers = () => {
           members.forEach((member) => {
             const memberId = member.autodeskId;
             const memberName = member.name;
+            const products = member.products;
 
             if(newMembersProjects[memberId]) {
-              newMembersProjects[memberId].push(projectId);
+              newMembersProjects[memberId].push({projectId, products});
             } else {
-              newMembersProjects[memberId] = [projectId];
+              newMembersProjects[memberId] = [{projectId, products}];
             }
 
             if(!newMembers[memberId]) {

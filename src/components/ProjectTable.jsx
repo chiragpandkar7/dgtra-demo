@@ -3,93 +3,134 @@ import { Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import useProjects from '../hooks/useProjects';
 import useMembers from '../hooks/useMembers';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Switch from '@mui/material/Switch';
 import { getPermissions } from '../apis/apsServices';
-
-const columns = [
-  { field: 'projectName', headerName: 'Project List', width: 300 },
-  { field: 'docs', headerName: 'Docs', width: 150 },
-  { field: 'designCollaboration', headerName: 'Design Collaboration', width: 150 },
-  { field: 'modelCoordination', headerName: 'Model Coordination', width: 150 },
-  { field: 'takeoff', headerName: 'Takeoff', width: 150 },
-  { field: 'autoSpecs', headerName: 'AutoSpecs', width: 150 },
-  { field: 'build', headerName: 'Build', width: 150 },
-  { field: 'costManagement', headerName: 'Cost Management', width: 150 },
-  { field: 'insight', headerName: 'Insight', width: 150 },
-];
 
 const ProjectTable = () => {
   const { projects } = useProjects();
   useMembers();
   const selectedMemberId = useSelector((state) => state.members.selectedMemberId);
   const membersProjects = useSelector((state) => state.membersProjects.projects);
+  console.log(membersProjects)
+  const selectedMembersProjectIds = selectedMemberId
+    ? membersProjects[selectedMemberId]?.map((project) => project.projectId) || []
+    : [];
 
-  const selectedMembersProjectIds = selectedMemberId ? membersProjects[selectedMemberId] || [] : [];
+  const filteredProjects = projects.filter((project) =>
+    selectedMembersProjectIds.includes(project.id)
+  );
 
-  const filteredProjects = projects.filter((project) => selectedMembersProjectIds.includes(project.id));
 
-  const [projectsWithPermissions, setProjectsWithPermissions] = useState({});
+  let handleSwitch=( access ) =>{
+    console.log(access)
 
-  useEffect(() => {
-    const fetchProjectsWithPermissions = async () => {
-      try {
-        const projectsWithPermissions = await Promise.all(
-          filteredProjects.map(async (project) => {
-            const permissionsResponse = await getPermissions(project.id, selectedMemberId);
-            const permissions = permissionsResponse.data.products;
-            console.log(permissionsResponse);
-            return {
-              projectId: project.id,
-              permissions,
-            };
-          })
-        );
+  
+    const permissionKey = access.field;
+  
+    const newAccess = access[permissionKey]?.access === 'administrator' ? 'none' : 'administrator';
+  
 
-        const projectPermissionsMap = {};
-        projectsWithPermissions.forEach((project) => {
-        projectPermissionsMap[project.projectId] = project.permissions;
-        console.log(projectPermissionsMap);
-    });
+  }
+  
 
-    setProjectsWithPermissions(projectPermissionsMap);
-      } catch (error) {
-        console.error('Error fetching permissions:', error);
-      }
+  const columns = [
+    { field: 'projectName', headerName: 'Project List', width: 300 },
+    {
+      field: 'docs',
+      headerName: 'Docs',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+     
+        return <Switch onClick={()=>handleSwitch(row)} checked={row.docs?.access === 'administrator' || row.docs?.access === 'member'} />
+      },
+  
+    },
+    {
+      field: 'designCollaboration',
+      headerName: 'Design Collaboration',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        
+        return <Switch onClick={()=>handleSwitch(row)} checked={row.designCollaboration?.access === 'administrator' || row.designCollaboration?.access === 'member'} />
+      },
+    },
+    {
+      field: 'modelCoordination',
+      headerName: 'Model Coordination',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        return<Switch onClick={()=>handleSwitch(row)} checked={row.modelCoordination?.access === 'administrator' || row.modelCoordination?.access === 'member'} />
+      },
+    },
+    {
+      field: 'takeoff',
+      headerName: 'Takeoff',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        return <Switch onClick={()=>handleSwitch(row)} checked={row.takeoff?.access === 'administrator' || row.takeoff?.access === 'member'} />
+      },
+    },
+    {
+      field: 'autoSpecs',
+      headerName: 'AutoSpecs',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        return <Switch onClick={()=>handleSwitch(row)} checked={row.autoSpecs?.access === 'administrator' || row.autoSpecs?.access === 'member'} />
+      },
+    },
+    {
+      field: 'build',
+      headerName: 'Build',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        return <Switch onClick={()=>handleSwitch(row)} checked={row.build?.access === 'administrator' || row.build?.access === 'member'} />
+      },
+    },
+    {
+      field: 'costManagement',
+      headerName: 'Cost Management',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        return <Switch onClick={()=>handleSwitch(row)} checked={row.costManagement?.access === 'administrator' || row.costManagement?.access === 'member'} />
+      },
+    },
+    {
+      field: 'insight',
+      headerName: 'Insight',
+      width: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        return<Switch onClick={()=>handleSwitch(row)} checked={row.insight?.access === 'administrator' || row.insight?.access === 'member'} />
+      },
+    },
+  ];
+
+  const rows = filteredProjects.map((project) => {
+    const projectPermissions =
+      membersProjects[selectedMemberId].find((item) => item.projectId === project.id)?.products || [];
+
+    return {
+      id: project.id,
+      projectName: project.name,
+      docs: projectPermissions.find((item) => item.key === 'docs'),
+      designCollaboration: projectPermissions.find((item) => item.key === 'designCollaboration'),
+      modelCoordination: projectPermissions.find((item) => item.key === 'modelCoordination'),
+      takeoff: projectPermissions.find((item) => item.key === 'takeoff'),
+      autoSpecs: projectPermissions.find((item) => item.key === 'autoSpecs'),
+      build: projectPermissions.find((item) => item.key === 'build'),
+      costManagement: projectPermissions.find((item) => item.key === 'cost'),
+      insight: projectPermissions.find((item) => item.key === 'insight'),
+      projectAdministration: projectPermissions.find((item) => item.key === 'projectAdministration'),
     };
-
-    if (selectedMemberId && filteredProjects.length > 0) {
-      fetchProjectsWithPermissions();
-    }
-  }, [selectedMemberId, filteredProjects]);
-
-  const rows = filteredProjects.map((project, index) => ({
-    id: index + 1,
-    projectName: project.name,
-    docs:projectsWithPermissions[project.id]?projectsWithPermissions[project.id][2].access:" "
-    // <Switch checked={Boolean(project.docs)} />
-    ,
-    designCollaboration: projectsWithPermissions[project.id]?projectsWithPermissions[project.id][3].access:" "
-    // <Switch checked={Boolean(project.designCollaboration)} />
-    ,
-    modelCoordination: projectsWithPermissions[project.id]?projectsWithPermissions[project.id][5].access:" "
-    // <Switch checked={Boolean(project.modelCoordination)} />
-    ,
-    takeoff: projectsWithPermissions[project.id]?projectsWithPermissions[project.id][6].access:" "
-    // <Switch checked={Boolean(project.takeoff)} />
-    ,
-    autoSpecs: projectsWithPermissions[project.id]?projectsWithPermissions[project.id][7].access:" "
-    // <Switch checked={Boolean(project.autoSpecs)} />
-    ,
-    build: projectsWithPermissions[project.id]?projectsWithPermissions[project.id][4].access:" "
-    // <Switch checked={Boolean(project.build)} />
-    ,
-    costManagement: projectsWithPermissions[project.id]?projectsWithPermissions[project.id][8].access:" "
-    // <Switch checked={Boolean(project.costManagement)} />
-    ,
-    insight: projectsWithPermissions[project.id]?projectsWithPermissions[project.id][2].access:" "
-    // <Switch checked={Boolean(project.insight)} />,
-  }));
+  });
 
   return (
     <div style={{ height: '80vh', width: '100%', marginTop: '20px' }} className="main-content">

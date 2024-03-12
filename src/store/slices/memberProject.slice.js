@@ -9,6 +9,10 @@ const membersProjectsSlice = createSlice ({
         setMembersProjects(state, action) {
             state.projects = action.payload.newMembersProjects;
         },
+        updateMemberPermission(state, action) {
+            const { projectId} = action.payload;
+            
+          },
     },
 });
 
